@@ -1,3 +1,13 @@
+class InsufficientFundsException(Exception):
+
+    def __init__(self, amt):
+        self.msg = f'You do not have enough funds to withdraw {amt}'
+
+    def __str__(self):
+        return self.msg
+
+
+
 class Account:
     ac_num = 10000000
     totalDeposits = 0
@@ -15,9 +25,12 @@ class Account:
         print("You have made a deposit of :£", amt, "Your new balance is :£", self._balance)
 
     def withdraw(self,amt):
-        self._balance -= amt
-        Account.totalDeposits -= amt
-        print("You have withdrawn :£", amt, "Your new balance is :£", self._balance)
+        if amt > self._balance:
+            raise InsufficientFundsException(amt)
+        else:
+            self._balance -= amt
+            Account.totalDeposits -= amt
+            print("You have withdrawn :£", amt, "Your new balance is :£", self._balance)
 
     def getbalance(self):
         return self._balance
